@@ -11,6 +11,7 @@ import Root from './Components/Root.jsx';
 import Home from './Components/Home.jsx';
 import Login from './Components/Login.jsx';
 import Register from './Components/Register.jsx';
+import HeroRegister from './Components/HeroRegister.jsx';
 
 
 const router = createBrowserRouter([
@@ -30,7 +31,10 @@ const router = createBrowserRouter([
         path: '/register',
         element: <Register></Register>
       },
-      {}
+      {
+        path:'/hero-register',
+        element: <HeroRegister></HeroRegister>
+      }
     ]
   },
 ]);
