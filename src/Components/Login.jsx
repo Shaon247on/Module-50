@@ -15,15 +15,21 @@ const Login = () => {
         setSuccess('')
         signInWithEmailAndPassword(auth, email, password)
         .then(result =>{
-            console.log(result.user)
+            if(result.user.emailVerified){
+                console.log(result.user)
             setSuccess('Login Successful')
+            return
+            }
+            else{
+                setError('Kindly verified your email')
+            }
         })
         .catch(error =>{
             console.error(error);
             setError(error.message)
         })
     }
-    const handleResetPassword = e =>{
+    const handleResetPassword = () =>{
         const email =emailRef.current.value
         if(!email){
             

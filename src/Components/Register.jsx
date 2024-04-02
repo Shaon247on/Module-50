@@ -1,4 +1,4 @@
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, sendEmailVerification, updateProfile } from "firebase/auth";
 import auth from "../firebase/firebase.config";
 import { useState } from "react";
 import { MdRemoveRedEye } from "react-icons/md";
@@ -13,9 +13,10 @@ const Register = () => {
     const handleRegister= e =>{
         e.preventDefault()
         const email = e.target.email.value
+        const name = e.target.name.value
         const password = e.target.password.value
         const accepted = e.target.terms.checked
-        console.log(email, password, accepted)
+        console.log(name,email, password, accepted)
         //reset error
         setRegisterError('')
         setSuccess('')
@@ -36,6 +37,24 @@ const Register = () => {
         .then(result =>{
             console.log(result.user)
             setSuccess('User Created Successfully')
+
+            // Update profile
+            updateProfile(result.user, {
+                displayName: name,
+                photoURL: 'https://example.com/jane-q-user/profile.jpg'
+            })
+            .then(()=>{
+                console.log('Profile Updated')
+            })
+            .catch(error =>{
+                console.error();(error)
+            })
+            // Send verification email
+            sendEmailVerification(result.user)
+            .then(result =>{
+                console.log(result);
+                alert("please check you email");
+            })
         })
         .catch(error =>{
             console.error(error)
@@ -48,6 +67,8 @@ const Register = () => {
             <div className="mx-auto md:w-1/2">
                 <h2 className='text-3xl'>Please Register</h2>
                 <form onSubmit={handleRegister}>
+                    <input type="text" name="name" id="3" className="input input-bordered mb-4 mt-4 w-3/4" placeholder="Your Name" required />
+                    <br />
                     <input type="email" name="email" id="1" className="input input-bordered mb-4 mt-4 w-3/4" placeholder="Your Email Address" required />
                     <br />
                     <input placeholder="Password" className="input input-bordered w-3/4"  type={showPassword? 'text': 'password'} 
